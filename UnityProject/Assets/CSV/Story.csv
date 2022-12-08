@@ -1,6 +1,0 @@
-id,mainText,sprite
-0,あなたは'海'と'山'のどちらに行きたい？,Pic/start
-1,間違っています！,null
-2,海です！,Pic/sea
-3,山です！,Pic/mt
-4,こんにちは!,null
