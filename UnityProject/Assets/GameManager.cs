@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public Text mainText;
     public InputField inputField;
     public Image image;
+    public Text directoryText;
 
     public int count = 0;
 
@@ -26,11 +27,13 @@ public class GameManager : MonoBehaviour
         inputField = inputField.GetComponent<InputField>();
         mainText = mainText.GetComponent<Text>();
         image = image.GetComponent<Image>();
+        directoryText = directoryText.GetComponent<Text>();
 
         /* 000 */
         inputField.enabled = false;
         DisplayText("Hello, world");
         DisplayImage("start");
+        DisplayDirectory("world");
     }
 
     /// <summary>
@@ -76,5 +79,25 @@ public class GameManager : MonoBehaviour
     public void DisplayImage(string path)
     {
         image.sprite = Resources.Load<Sprite>("Pic/" + path);
+    }
+
+    /// <summary>
+    /// ディレクトリを表示する
+    /// </summary>
+    /// <param name="currentLocation">現在のディレクトリ</param>
+    public void DisplayDirectory(string currentLocation)
+    {
+        string text = "";
+        if (count == 0)
+        {
+            text =  "world\n" +
+                    "\t└ Hokkaido\n" +
+                    "\t\t├ Sapporo\n" +
+                    "\t\t└ Chitose\n" +
+                    "\t\t\t└ CIST\n";
+        }
+
+        text = text.Replace(currentLocation, currentLocation + " *");
+        directoryText.text = text;
     }
 }
