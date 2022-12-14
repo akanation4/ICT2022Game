@@ -17,6 +17,11 @@ public class GameManager : MonoBehaviour
     public Text directoryText;
 
     public int count = 0;
+    public string userName = "Unknown";
+    public string input = "Text";
+
+    public float waitTime = 1.0f;
+
 
     /// <summary>
     /// 初期化
@@ -29,11 +34,7 @@ public class GameManager : MonoBehaviour
         image = image.GetComponent<Image>();
         directoryText = directoryText.GetComponent<Text>();
 
-        /* 000 */
-        inputField.enabled = false;
-        DisplayText("Hello, world");
-        DisplayImage("start");
-        DisplayDirectory("world");
+        StartCoroutine(Main());
     }
 
     /// <summary>
@@ -41,25 +42,107 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // エンターキーが押されたらストーリーを進行する
-        if (Input.GetKeyDown(KeyCode.Return))
+
+    }
+
+    IEnumerator Main()
+    {
+        /* 000 */
+        inputField.enabled = false;
+        DisplayText("Hello, world");
+        DisplayImage("start");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        /* 001 */
+        resetInput();
+        DisplayText("What is your name?");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        /* 002 */
+        inputField.enabled = false;
+        userName = inputField.text;
+        DisplayText("Hello, " + userName);
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        /* 003 */
+        resetInput();
+        DisplayText("Whitch do you want to go? (sea or mountain)");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        /* 004 */
+        input = inputField.text;
+        if (input == "sea")
         {
-            count++;
-            switch (count)
-            {
-                /* 001 */
-                case 1:
-                    inputField.enabled = true;
-                    DisplayText("What is your name?");
-                    break;
-                /* 002 */
-                case 2:
-                    inputField.enabled = false;
-                    DisplayText("Hello, " + inputField.text);
-                    break;
-                default:
-                    break;
-            }
+            StartCoroutine(Sea());
+        }
+        else if (input == "mountain")
+        {
+            StartCoroutine(Mountain());
+        }
+        else
+        {
+            DisplayText("Oops, I don't know that place");
+        }
+
+    }
+
+    IEnumerator Sea()
+    {
+        inputField.enabled = false;
+        DisplayText("You are in the sea");
+        DisplayImage("sea");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        resetInput();
+        DisplayText("Do you want to go to the mountain? (yes or no)");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        input = inputField.text;
+        if (input == "yes")
+        {
+            StartCoroutine(Mountain());
+        }
+        else if (input == "no")
+        {
+            DisplayText("You are in the sea");
+        }
+        else
+        {
+            DisplayText("Oops, I don't know that answer");
+        }
+    }
+
+    IEnumerator Mountain()
+    {
+        inputField.enabled = false;
+        DisplayText("You are in the mountain");
+        DisplayImage("mountain");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        resetInput();
+        DisplayText("Do you want to go to the sea? (yes or no)");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        input = inputField.text;
+        if (input == "yes")
+        {
+            StartCoroutine(Sea());
+        }
+        else if (input == "no")
+        {
+            DisplayText("You are in the mountain");
+        }
+        else
+        {
+            DisplayText("Oops, I don't know that answer");
         }
     }
 
@@ -99,5 +182,10 @@ public class GameManager : MonoBehaviour
 
         text = text.Replace(currentLocation, currentLocation + " *");
         directoryText.text = text;
+
+    public void resetInput()
+    {
+        inputField.text = "";
+        inputField.enabled = true;
     }
 }
