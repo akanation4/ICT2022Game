@@ -434,7 +434,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.75
-  m_Text: "Hello World!\n\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\n30\u6587\u5B57*3\u884C\u304C\u5165\u529B\u76EE\u5B89"
+  m_Text: "Hello World!\n<color=orange>\u30C6\u30B9\u30C8</color>\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\u30C6\u30B9\u30C8\n30\u6587\u5B57*3\u884C\u304C\u5165\u529B\u76EE\u5B89"
 --- !u!222 &607529360
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -777,6 +777,7 @@ MonoBehaviour:
   user: "\u4FFA\u304F\u3093"
   chiki: "\u30C1\u30AD"
   chikiImg: chiki
+  unknownName: ???
 --- !u!1 &1069097029
 GameObject:
   m_ObjectHideFlags: 0
@@ -1226,6 +1227,7 @@ MonoBehaviour:
   user: "\u4FFA\u304F\u3093"
   chiki: "\u30C1\u30AD"
   chikiImg: chiki
+  unknownName: ???
 --- !u!1 &1883955114
 GameObject:
   m_ObjectHideFlags: 0
