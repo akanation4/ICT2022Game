@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
         characterImage = characterImage.GetComponent<Image>();
         //bgmSource = bgmSource.GetComponent<AudioSource>();
 
-        StartCoroutine(Chapter1());
+        StartCoroutine(Chapter0());
     }
 
     /// <summary>
@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        goto jump;
+        //goto jump;
 
         DisplayText("目を開けると、私は見知らぬ世界にいた。いや、植物や動物はどことなく見たことはあるので完全に知らない世界というわけではないが、なんとなく雰囲気が違う気がするのだ。");
         yield return new WaitForSeconds(waitTime);
@@ -483,7 +483,7 @@ public class GameManager : MonoBehaviour
         DisplayText("「マップが見えるでしょ？」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-        jump:
+
         DisplayText("「これで自分が今どこにいるかを見ることができるわ。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -503,6 +503,11 @@ public class GameManager : MonoBehaviour
 
         DisplayCharacterName(chiki);
         DisplayText("「この世界では、あなたや私が喋っている日本語以外に『Linuxコマンド』という言葉があるわ。」");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        DisplayCharacterName(unknownName);
+        DisplayText("続きは製品版で！！！");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
     }
