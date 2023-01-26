@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public string chiki = "チキ"; // チキ(チュートリアルのキャラクター)の名前
     public string chikiImg = "chiki"; // チキの画像の名前
     public string unknownName = "???"; // 不明なキャラクターの名前
+    public string sys = "***"; // システムメッセージの名前
     public string pb = "pocketbook.txt"; // 手帳のファイル名
     public string mine = "ミーネ"; // エネ(敵キャラクター)の名前
     public string mineImg = "mine"; // エネの画像の名前
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
         characterImage = characterImage.GetComponent<Image>();
         //bgmSource = bgmSource.GetComponent<AudioSource>();
 
-        StartCoroutine(Chapter3());
+        StartCoroutine(Chapter0());
     }
 
     /// <summary>
@@ -62,128 +63,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ストーリーの進行例
-    /// </summary>
-    IEnumerator Main()
-    {
-        /* 000 */
-        inputField.enabled = false;
-        DisplayText("Hello, world");
-        DisplayImage("start");
-        DisplayDirectory("World");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 001 */
-        resetInput();
-        DisplayText("What is your name?");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 002 */
-        inputField.enabled = false;
-        user = inputField.text;
-        DisplayText("Hello, " + user);
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 003 */
-        resetInput();
-        DisplayText("Whitch do you want to go? (sea or mountain)");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 004 */
-        input = inputField.text;
-        if (input == "sea")
-        {
-            StartCoroutine(Sea());
-        }
-        else if (input == "mountain")
-        {
-            StartCoroutine(Mountain());
-        }
-        else
-        {
-            DisplayText("Oops, I don't know that place");
-        }
-
-    }
-
-    IEnumerator Sea()
-    {
-        /* 005 */
-        inputField.enabled = false;
-        DisplayText("You are in the sea");
-        DisplayImage("sea");
-        DisplayDirectory("Sea");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 006 */
-        resetInput();
-        DisplayText("Do you want to go to the mountain? (yes or no)");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 007 */
-        input = inputField.text;
-        if (input == "yes")
-        {
-            StartCoroutine(Mountain());
-        }
-        else if (input == "no")
-        {
-            DisplayText("You are in the sea");
-        }
-        else
-        {
-            DisplayText("Oops, I don't know that answer");
-        }
-    }
-
-    IEnumerator Mountain()
-    {
-        /* 008 */
-        inputField.enabled = false;
-        DisplayText("You are in the mountain");
-        DisplayImage("mountain");
-        DisplayDirectory("Mountain");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 009 */
-        resetInput();
-        DisplayText("Do you want to go to the sea? (yes or no)");
-        yield return new WaitForSeconds(waitTime);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        /* 010 */
-        input = inputField.text;
-        if (input == "yes")
-        {
-            StartCoroutine(Sea());
-        }
-        else if (input == "no")
-        {
-            DisplayText("You are in the mountain");
-        }
-        else
-        {
-            DisplayText("Oops, I don't know that answer");
-        }
-    }
-
     IEnumerator Chapter0()
     {
         while (true)
         {
-            resetInput();
-            DisplayImage(null);
+            ResetInput();
+            DisplayImage("black");
+            //characterImage.GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            ToggleImageOpacity(true);
             DisplayCharacterImage(null);
             directoryText.text = "";
-            DisplayCharacterName("***");
+            DisplayCharacterName(sys);
             DisplayText("あなたの名前を入力してください");
             yield return new WaitForSeconds(waitTime);
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -194,7 +84,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(waitTime);
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-            resetInput();
+            ResetInput();
             DisplayText("このままはじめますか？(y/n)");
             yield return new WaitForSeconds(waitTime);
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -216,14 +106,12 @@ public class GameManager : MonoBehaviour
     {
         stage = 1;
         inputField.enabled = false;
-        // DisplayImage("start");
+        DisplayImage("start");
         DisplayDirectory(null);
         DisplayCharacterName(user);
         DisplayText("「...ここは？」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-
-        //goto jump;
 
         DisplayText("目を開けると、私は見知らぬ世界にいた。いや、植物や動物はどことなく見たことはあるので完全に知らない世界というわけではないが、なんとなく雰囲気が違う気がするのだ。");
         yield return new WaitForSeconds(waitTime);
@@ -272,6 +160,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
+        ToggleImageOpacity(false);
         DisplayCharacterImage(chikiImg);
         DisplayCharacterName(user);
         DisplayText("「下？」\n言われた通り下を見てみると、そこには変な生物が浮いていた。");
@@ -404,7 +293,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        resetInput();
+        ResetInput();
         DisplayCharacterName(chiki);
         DisplayText("「試しに、<color=orange>cd</color> cyber_entrance って打ってみて」");
         yield return new WaitForSeconds(waitTime);
@@ -419,7 +308,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                resetInput();
+                ResetInput();
                 DisplayText("「違うわ、<color=orange>cd</color> cyber_entrance よ。」");
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -428,11 +317,12 @@ public class GameManager : MonoBehaviour
         }
 
         inputField.enabled = false;
+        DisplayImage("cyber_entrance");
         DisplayText("「そう、その調子よ。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        resetInput();
+        ResetInput();
         DisplayText("「そしたら、さっきと同じように cyber_central に行ってみて。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -446,7 +336,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                resetInput();
+                ResetInput();
                 DisplayText("「違うわ、マップの移動をするときは<color=orange>cd</color>を使うのよ。」");
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -455,11 +345,12 @@ public class GameManager : MonoBehaviour
         }
 
         inputField.enabled = false;
+        DisplayImage("cyber_central");
         DisplayText("「いい感じね。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        resetInput();
+        ResetInput();
         DisplayText("「そうそう、マップを見たいときは<color=orange>pwd</color>を使うのよ」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -473,7 +364,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                resetInput();
+                ResetInput();
                 DisplayText("「違うわ、マップを見たいときは<color=orange>pwd</color>と打つの。」");
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -569,7 +460,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        resetInput();
+        ResetInput();
         DisplayCharacterName(chiki);
         DisplayText("「そうね。だからあの手帳はきっとあなたの助けになると思うわ。ただ、普通に調べるだけではあなたの望んでる情報は得られないわ。<color=orange>cat</color> pocketbook.txt と打ってみて」");
         yield return new WaitForSeconds(waitTime);
@@ -584,7 +475,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                resetInput();
+                ResetInput();
                 DisplayText("「違うわ、<color=orange>cat</color> pocketbook.txt よ。」");
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -735,8 +626,8 @@ public class GameManager : MonoBehaviour
         DisplayText("「話を戻すけど、さっき言ってた『視える』ってやつ、どうやったらできるの？さっきはよくわからないままだったから。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-        goto jump;
-        resetInput();
+
+        ResetInput();
         DisplayCharacterName(chiki);
         DisplayText("「そういえば教えてなかったわね。せっかくだからここで試してみましょ。<color=orange>ls</color>って打ってみて。」");
         yield return new WaitForSeconds(waitTime);
@@ -751,7 +642,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                resetInput();
+                ResetInput();
                 DisplayText("「違うわ、<color=orange>ls</color>よ。」");
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -775,8 +666,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        resetInput();
-        DisplayCharacterName(user);
+        ResetInput();
+        DisplayCharacterName(chiki);
         DisplayText("「それじゃあ、cyber_avenueってところに進んでみましょ。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -794,7 +685,7 @@ public class GameManager : MonoBehaviour
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-                resetInput();
+                ResetInput();
                 DisplayText("「今回はcyber_avenueの方に進むのよ。」");
                 yield return new WaitForSeconds(waitTime);
                 yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -803,13 +694,16 @@ public class GameManager : MonoBehaviour
         }
 
         inputField.enabled = false;
+        DisplayImage("cyber_avenue");
         DisplayDirectory("cyber_avenue");
+        ToggleImageOpacity(true);
         DisplayCharacterImage(null);
         DisplayCharacterName(chiki);
         DisplayText("「待って、誰かいる。」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
+        ToggleImageOpacity(false);
         DisplayCharacterImage(mineImg);
         DisplayCharacterName(user);
         DisplayText("街の通りを進んでいくと、不気味な仮面をつけ、黒いフードを被った少女が道の真ん中に佇んでいるのが見えた。");
@@ -868,7 +762,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        DisplayText("それならば話は別だ。少女がなぜ紙切れを拾っているのかはわからない。だが、この問題に正解することで手がかりが手に入るのなら問題に挑んだ方がいいだろう、と私は思った。");
+        DisplayText("それならば話は別だ。少女がなぜ紙切れを拾っているのかはわからない。だが、この問題に正解することで手がかりが手に入るのなら問題に挑んだ方がいいだろうと私は思った。");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
@@ -887,7 +781,7 @@ public class GameManager : MonoBehaviour
         DisplayText("「さっぱりわからないぃぃ………」");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
-        jump:
+
         DisplayText("10分ほど考えてもさっぱりわからない。なんだトロイの木馬とは。");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -946,9 +840,9 @@ public class GameManager : MonoBehaviour
 
         while (true)
         {
-            resetInput();
+            ResetInput();
             DisplayCharacterName("Q1.");
-            DisplayText("普段Webサイトにアクセスする際に用いているURLの最初の文字列は何でしょう\n1.http  2.https  3.hhtp  4.ttps");
+            DisplayText("普段Webサイトにアクセスする際に用いているURLの最初の文字列は何でしょう(半角数字で解答)\n1.http  2.https  3.hhtp  4.ttps");
             yield return new WaitForSeconds(waitTime);
             yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
@@ -959,7 +853,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                resetInput();
+                ResetInput();
                 DisplayCharacterName(unknownName);
                 DisplayText("「不正解！Enterで戻ってね！」");
                 yield return new WaitForSeconds(waitTime);
@@ -1002,7 +896,109 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 
-        DisplayCharacterName("***");
+        DisplayCharacterName(mine);
+        DisplayText("「ありがとー！またミーネとあそんでね！」");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        ToggleImageOpacity(true);
+        DisplayCharacterImage(null);
+        DisplayCharacterName(user);
+        DisplayText("「うん、また──え……？」");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        DisplayText("あの子の名前ミーネっていうんだ、と思いながら彼女の別れのあいさつに返事しようと彼女の方を向くと、彼女の姿はどこにもなかった。");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        DisplayCharacterName(chiki);
+        DisplayText("「消えた……？いったいどこに行ったのかしら……？」");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        DisplayCharacterName(user);
+        DisplayText("「どこに行ったんだろう……でもひとまず紙切れは見つかったから、一度cyber_centralに戻らない？」");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        ResetInput();
+        DisplayCharacterName(chiki);
+        DisplayText("「それもそうね、戻りましょうか。」");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        while (true)
+        {
+            input = inputField.text;
+            if (input == "cd .." || input == "cd ../")
+            {
+                break;
+            }
+            else
+            {
+                ResetInput();
+                DisplayText("「違うわ、<color=orange>cd</color> .. よ。");
+                yield return new WaitForSeconds(waitTime);
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+                continue;
+            }
+        }
+
+        inputField.enabled = false;
+        DisplayDirectory("cyber_central");
+        DisplayCharacterName(user);
+        DisplayText("消えたことは不思議だが、それよりも今は優先すべき事があると思い出し、来た道を戻ることにした。");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        ResetInput();
+        DisplayCharacterName(sys);
+        DisplayText("行き先をコマンドで指定してください。\n行動可能エリア→cyber_alley、cyber_downtown");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+
+        while (true)
+        {
+            input = inputField.text;
+            if (input == "cd cyber_alley")
+            {
+                StartCoroutine(Chapter3_cyber_alley());
+                break;
+            }
+            else if (input == "cd cyber_downtown")
+            {
+                StartCoroutine(Chapter3_cyber_downtown());
+                break;
+            }
+            else
+            {
+                ResetInput();
+                DisplayText("「cd (行きたい場所) で入力してください」");
+                yield return new WaitForSeconds(waitTime);
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+                continue;
+            }
+        }
+    }
+
+    IEnumerator Chapter3_cyber_alley()
+    {
+        inputField.enabled = false;
+        DisplayDirectory("cyber_alley");
+        DisplayImage("cyber_alley");
+        DisplayCharacterName(sys);
+        DisplayText("続きは製品版で！");
+        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+    }
+
+    IEnumerator Chapter3_cyber_downtown()
+    {
+        inputField.enabled = false;
+        DisplayDirectory("cyber_downtown");
+        DisplayImage("cyber_downtown");
+        DisplayCharacterName(sys);
         DisplayText("続きは製品版で！");
         yield return new WaitForSeconds(waitTime);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
@@ -1113,11 +1109,24 @@ public class GameManager : MonoBehaviour
     /// 入力欄をリセットする
     /// 入力を促すテキストの前に置く
     /// </summary>
-    public void resetInput()
+    public void ResetInput()
     {
         inputField.text = "";
         inputField.enabled = true;
     }
+
+    public void ToggleImageOpacity(bool boolValue)
+    {
+        if (boolValue)
+        {
+            characterImage.color = new Color(1, 1, 1, 0);
+        }
+        else
+        {
+            characterImage.color = new Color(1, 1, 1, 1);
+        }
+    }
+
 
     // IEnumerator Test(Block[] blocks)
     // {
